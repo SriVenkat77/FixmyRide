@@ -4,6 +4,7 @@ const {
     updateBookingStatus,
     getAllBookingByOwnerID,
     getAllBookingByCustomerID,
+    verifyPayment,
 } = require('../controllers/booking.controllers');
 const {
     isAuthenticatedUser,
@@ -36,5 +37,10 @@ router
     .route('/bookings')
     .post([isAuthenticatedUser, authorizeRoles('customer'), createBookings])
     .patch([isAuthenticatedUser, authorizeRoles('owner'), updateBookingStatus]);
+
+// Add verify payment route
+router
+    .route('/bookings/verify-payment')
+    .post([isAuthenticatedUser, authorizeRoles('customer'), verifyPayment]);
 
 module.exports = router;

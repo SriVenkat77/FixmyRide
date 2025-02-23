@@ -5,6 +5,9 @@ const catchAsyncErrors = require('../middleware/catchAsyncErrors');
 const ErrorHandler = require('../utils/errorHandler');
 const isValidObjectId = require('../utils/isValidObjectId');
 const sendEmail = require('../utils/sendMail');
+const crypto = require('crypto');
+const Razorpay = require('razorpay');
+
 /**
  * @description Get all bookings
  * @path {/api/v1/bookings}
@@ -33,6 +36,13 @@ exports.getAllBookings = catchAsyncErrors(async (req, res, next) => {
  * @method {POST}
  * @access private
  */
+
+
+const { RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET } = process.env;
+const razorpayInstance = new Razorpay({
+  key_id: RAZORPAY_KEY_ID,
+  key_secret: RAZORPAY_KEY_SECRET,
+});
 
 exports.createBookings = catchAsyncErrors(async (req, res, next) => {
     const serviceId = req.body?.serviceId;
@@ -69,53 +79,78 @@ exports.createBookings = catchAsyncErrors(async (req, res, next) => {
         );
     }
 
+    // Razorpay payment order creation
+    const price = service.price;
+    const orderOptions = {
+        amount: price * 100, // Amount in paise
+        currency: 'INR',
+        receipt: `receipt#${Date.now()}`,
+        payment_capture: 1,
+    };
+
+    try {
+        const order = await razorpayInstance.orders.create(orderOptions);
+        const orderId = order.id;
+        
+        // Now, return the orderId to the frontend for payment processing
+        res.status(200).json({
+            success: true,
+            orderId,
+            amount: order.amount,
+            currency: order.currency,
+        });
+    } catch (error) {
+        return next(new ErrorHandler('Failed to create Razorpay order', 500));
+    }
+});
+
+// Verify payment 
+
+
+exports.verifyPayment = catchAsyncErrors(async (req, res, next) => {
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature, serviceId, date } = req.body;
+
+  // Prepare the data to verify the signature
+  const body = razorpay_order_id + "|" + razorpay_payment_id;
+  const expectedSignature = crypto
+    .createHmac('sha256', RAZORPAY_KEY_SECRET)
+    .update(body)
+    .digest('hex');
+
+  // Verify the payment signature
+  if (expectedSignature === razorpay_signature) {
+    // Payment is verified, now create the booking
+    const customerId = req.user._id;
+
+    // Check if the service exists
+    let service = await Service.findById(serviceId).exec();
+    if (!service) {
+      return next(new ErrorHandler('Service not found', 404));
+    }
+
+    // Create the booking
     const booking = await Booking.create({
-        customer: customerId,
-        service: serviceId,
-        date,
+      customer: customerId,
+      service: serviceId,
+      date,
+      orderId: razorpay_order_id, // Store the Razorpay order ID
+      paymentId: razorpay_payment_id, // Store the payment ID
     });
 
-    // TODO:
-    // Send Email to Owner ✅
-    const message = `
-        <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px; font-family: Arial, sans-serif; line-height: 1.6;">
-        <h1 style="margin-bottom: 10px; font-size: 24px;">Service name : ${
-            service?.name
-        }</h1>
-        <h2 style="margin-bottom: 10px; font-size: 20px;">Booked Date : ${new Date(
-            date
-        ).toDateString()}</h2>
-        <h3 style="margin-bottom: 10px; font-size: 18px;">Customer name : ${
-            user?.name
-        }</h3>
-        <h3 style="margin-bottom: 10px; font-size: 18px;">Customer Mobile Number : ${
-            user?.mobile
-        }</h3>
-        <h3 style="margin-bottom: 10px; font-size: 18px;">Customer Email : ${
-            user?.email
-        }</h3>
-    </div>
-        `;
-
     if (booking) {
-        try {
-            await sendEmail({
-                email: service?.ownerId?.email,
-                subject: 'Bike Service Status',
-                message,
-            });
-            return res.status(200).json({
-                success: true,
-                ownerMessage: `Email sent to Owner Email: ${service?.ownerId?.email}`,
-                message: `${service.name} booked successfully`,
-                booking,
-            });
-        } catch (error) {
-            return next(new ErrorHandler(error.message, 500));
-        }
+      return res.status(200).json({
+        success: true,
+        message: 'Payment successful, booking created.',
+        booking,
+      });
     }
-    return next(new ErrorHandler('Service booking Failed', 400));
+    return next(new ErrorHandler('Failed to create booking', 400));
+  } else {
+    return next(new ErrorHandler('Payment verification failed', 400));
+  }
 });
+
+
 
 /**
  * @description Update booking status
@@ -184,14 +219,35 @@ exports.updateBookingStatus = catchAsyncErrors(async (req, res, next) => {
         // Send Email to Customer  ✅
         if (booking.status === 'ReadyForDelivery') {
             const message = `
-        <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px; font-family: Arial, sans-serif; line-height: 1.6;">
-        <h1 style="margin-bottom: 10px; font-size: 24px;">Service name : ${
-            booking?.service?.name
-        }</h1>
-        <h2 style="margin-bottom: 10px; font-size: 20px;">Booked Date : ${new Date(
-            booking?.date
-        ).toDateString()}</h2>        
-        <h3 style="margin-bottom: 10px; font-size: 18px;">Status : <span style="color:green">Ready for Delivery</span></h3>
+            <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px; font-family: Arial, sans-serif; line-height: 1.6;">
+    
+      <!-- Header Section -->
+      <header style="text-align: center; background-color:rgb(61, 30, 185); color: white; padding: 10px;">
+        <h1 style="margin: 0;">FixmyRide</h1>
+        <p style="margin: 0; font-size: 16px;">Your trusted partner for bike services!</p>
+      </header>
+
+      <!-- Main Content Section -->
+      <section style="margin: 20px 0; padding: 10px; background-color:rgb(148, 128, 212); border: 1px solid #ddd;">
+        <h2 style="margin-bottom: 10px; font-size: 24px;">Service Name: ${booking?.service?.name}</h2>
+        <h3 style="margin-bottom: 10px; font-size: 20px;">Booked Date: ${new Date(booking?.date).toDateString()}</h3>        
+        <h3 style="margin-bottom: 10px; font-size: 18px;">Status: <span style="color:green">Ready for Delivery</span></h3>
+      </section>
+
+      <!-- Contact Information Section -->
+      <section style="margin: 20px 0; font-size: 16px; color: #555;">
+        <h3>Contact Us:</h3>
+        <p>Email: <a href="mailto:support@fixmyride.com" style="color:rgb(143, 128, 220);">support@fixmyride.com</a></p>
+        <p>Phone: (123) 456-7890</p>
+        <p>Address: 123 Bike St, Bike City, BC 12345</p>
+      </section>
+
+      <!-- Footer Section -->
+      <footer style="text-align: center; padding: 10px;  color: white;">
+        <p>&copy; 2025 FixmyRide. All rights reserved.</p>
+        <p><a href="http://www.fixmyride.com/privacy" style="color: white;">Privacy Policy</a> | <a href="http://www.fixmyride.com/terms" style="color: white;">Terms of Service</a></p>
+      </footer>
+
     </div>
         `;
 

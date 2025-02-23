@@ -72,7 +72,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
             httpOnly: true,  // Prevents client-side JavaScript access
             secure: true,    // Ensures HTTPS is used (important for production)
             sameSite: 'None', // Allows cross-origin requests
-            expires: new Date(Date.now() + 1 * 60 * 60 * 1000), // Expires in 1 hour
+            expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // Expires in 1 hour
         });
 
         // Send response with token

@@ -20,17 +20,4 @@ const sendEmail = async (options) => {
 
 module.exports = sendEmail;
 
-/**
- * try {
-    sendEmail({
-      email: user.email,
-      subject: "Bike Service Status",
-      message,
-    });
-    res
-      .status(200)
-      .json({ success: true, message: `Email sent to: ${user.email}` });
-  } catch (error) { 
-    return next(new ErrorHandler(error.message, 500));
-  }
- */
+

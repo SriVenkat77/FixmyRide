@@ -1,7 +1,8 @@
 // START OF SETUP ENVIRONMENT VARIABLES
 const dotenv = require('dotenv');
 const path = require('path');
-dotenv.config({ path: path.join(__dirname, 'config', 'config.env') });
+require('dotenv').config();
+
 // END OF SETUP ENVIRONMENT VARIABLES
 
 const express = require('express');
