@@ -276,7 +276,14 @@ exports.getAllBookingByCustomerID = catchAsyncErrors(async (req, res, next) => {
     // Fetch all bookings associated with the ownerId
     const bookings = await Booking.find({ customer: customerId })
         .populate('customer', 'name email mobile')
-        .populate('service', 'name description price ownerId')
+        .populate({
+            path: 'service',
+            populate: {
+                path: 'ownerId',
+                select: 'name'
+            }
+        })
+        
         .exec();
 
     if (!bookings) {
