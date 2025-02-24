@@ -96,15 +96,18 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 exports.logoutUser = (req, res, next) => {
     return res
         .status(200)
-        .cookie('token', null, {
-            expires: new Date(Date.now()), 
+        .cookie('token', '', {
+            expires: new Date(0), // Ensures immediate expiry
             httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', // Ensures cookie security
+            sameSite: 'Strict',
         })
         .json({
             success: true,
-            message: 'Logged out',
+            message: 'Logged out successfully',
         });
 };
+
 
 /**
  * @description Get currently logged in user details
