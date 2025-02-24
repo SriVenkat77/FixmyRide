@@ -99,7 +99,7 @@ exports.logoutUser = (req, res, next) => {
         .cookie('token', '', {
             expires: new Date(0), // Ensures immediate expiry
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', // Ensures cookie security
+            secure: process.env.NODE_ENV === 'production',
             sameSite: 'Strict',
         })
         .json({
@@ -107,6 +107,7 @@ exports.logoutUser = (req, res, next) => {
             message: 'Logged out successfully',
         });
 };
+
 
 
 /**
