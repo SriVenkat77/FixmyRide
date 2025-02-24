@@ -14,7 +14,7 @@ const CustomerBookings = () => {
     }, [getAllBookingsForCustomer]);
 
     return (
-        <div className='w-full flex items-center pt-20 justify-around flex-wrap space-x-3 space-y-3'>
+        <div className='w-full flex items-center pt-20 justify-around flex-wrap space-x-3 space-y-3 pb-10'>
             {bookings?.length ? (
                 bookings?.map((booking) => {
                     console.log({ booking });

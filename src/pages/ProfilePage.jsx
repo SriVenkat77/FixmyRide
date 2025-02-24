@@ -12,7 +12,7 @@ const ProfilePage = () => {
         : 'download.jpeg';  
 
     return (
-        <div className="w-full min-h-screen mx-auto pt-20 p-4 items-center"  style={{
+        <div className="w-full min-h-screen mx-auto pt-20 pb-10 p-4 items-center"  style={{
             backgroundImage: 'url(/FixmyRidelogo.jpg)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',

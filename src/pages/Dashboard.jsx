@@ -16,7 +16,7 @@ const Dashboard = () => {
            
         
           }} >
-            <div className="flex justify-center items-center w-full h-full pt-20 pb-20">
+            <div className="flex justify-center items-center w-full h-full pt-20 pb-10">
                 {user?.role === 'owner' ? <Owner /> : <Customer />}
             </div>
          

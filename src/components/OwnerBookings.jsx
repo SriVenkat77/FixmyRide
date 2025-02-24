@@ -14,7 +14,7 @@ const OwnerBookings = () => {
     }, [getAllBookingsForOwner]);
 
     return (
-        <div className="w-full flex flex-wrap items-center  justify-around space-x-3 pt-20 space-y-3">
+        <div className="w-full flex flex-wrap items-center  justify-around space-x-3 pt-20 pb-10 space-y-3">
             {bookings?.length ? (
                 bookings.map((booking) => (
                     <BookingCard booking={booking} key={booking._id} />

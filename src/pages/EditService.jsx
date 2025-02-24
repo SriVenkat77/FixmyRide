@@ -93,7 +93,7 @@ const EditService = () => {
             backgroundPosition: 'center',
             backgroundColor: '#545454',
           }} >
-            <div className="bg-slate-100  px-4 py-8 shadow-xl rounded-lg sm:px-10 xl:mx-auto xl:w-full xl:max-w-lg 2xl:max-w-lg">
+            <div className="bg-slate-100  px-4 py-8 shadow-xl rounded-lg sm:px-20 xl:mx-auto xl:w-full  2xl:max-w-lg">
                 <h2 className="text-xl sm:text-2xl font-bold leading-tight text-black text-center">
                     Modify Service
                 </h2>
@@ -117,7 +117,7 @@ const EditService = () => {
                             className="inline-flex w-full items-center justify-center rounded-md bg-gray-600 px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-orange-500"
                             disabled={isLoading}
                         >
-                            Edit Service
+                            Save Changes
                         </button>
                     </div>
                 </form>
