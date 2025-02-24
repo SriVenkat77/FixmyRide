@@ -7,6 +7,8 @@ const sendToken = ({ userObj, statusCode, response }) => {
             Date.now() + process.env.COOKIE_EXPIRES_TIME * 24 * 60 * 60 * 1000
         ),
         httpOnly: true,
+        secure: true,
+            sameSite: 'None',
     };
 
     response.status(statusCode).cookie('token', token, options).json({

@@ -94,13 +94,14 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
  * @path {/api/v1/logout}
  */
 exports.logoutUser = (req, res, next) => {
+    console.log('Logout API hit'); // Debugging log
     return res
         .status(200)
         .cookie('token', '', {
             expires: new Date(0), // Ensures immediate expiry
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'Strict',
+            secure: true, // Ensure HTTPS is used
+            sameSite: 'None', // Allow cross-site requests
         })
         .json({
             success: true,
