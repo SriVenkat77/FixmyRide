@@ -21,7 +21,7 @@ app.use(cookieParser());
 
 // CORS middleware
 const corsOptions = {
-    origin: 'http://localhost:5174',
+    origin: 'https://fixmyridea.netlify.app',
     credentials: true, 
     optionSuccessStatus: 200,
 };
