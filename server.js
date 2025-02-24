@@ -11,7 +11,7 @@ const server = app.listen(PORT, () =>
     )
 );
 
-// Handle unhandled promise rejections (eg: database connection error ) and uncaught exceptions (eg: syntax error)
+
 process.on('unhandledRejection', (err) => {
     console.log(`Error: ${err.message}`);
     console.log('Shutting down the server due to unhandled rejection error');

@@ -65,26 +65,29 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 
     if (user && (await user.isValidatePassword(password))) {
         // Generate JWT Token
-        const token = user.getJWTToken(); 
+        const token = user.getJWTToken();
 
         // Set token in cookie
         res.cookie('token', token, {
-            httpOnly: true,  // Prevents client-side JavaScript access
-            secure: true,    // Ensures HTTPS is used (important for production)
-            sameSite: 'None', // Allows cross-origin requests
-            expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // Expires in 1 hour
+            httpOnly: true,
+            secure: true,
+            sameSite: 'None',
+            expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
         });
 
-        // Send response with token
+        // Send response with full user data
         return res.status(200).json({
             success: true,
             message: 'Login successful',
             token,
+            user,
         });
     }
 
     return next(new ErrorHandler('Invalid email or password', 401));
 });
+
+
 
 /**
  * @description Logout a user
@@ -94,7 +97,7 @@ exports.logoutUser = (req, res, next) => {
     return res
         .status(200)
         .cookie('token', null, {
-            expires: new Date(Date.now()), // set cookie to expire in 1 second
+            expires: new Date(Date.now()), 
             httpOnly: true,
         })
         .json({

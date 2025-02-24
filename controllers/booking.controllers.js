@@ -259,7 +259,7 @@ exports.updateBookingStatus = catchAsyncErrors(async (req, res, next) => {
                 });
                 return res.status(200).json({
                     success: true,
-                    message: `Email sent to customer email: ${booking?.customer?.email} `,
+                    message: `Email sent to customer ${booking?.customer?.email} `,
                     booking,
                 });
             } catch (error) {

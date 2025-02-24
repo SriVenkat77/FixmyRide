@@ -17,8 +17,8 @@ const bookingSchema = new mongoose.Schema(
             required: [true, 'Booking Date is required.'],
             validate: {
                 validator: function (value) {
-                    // Custom validation function to ensure the selected date is today or in the future
-                    return value >= new Date().setHours(0, 0, 0, 0); // Set time to midnight for date comparison only
+                   
+                    return value >= new Date().setHours(0, 0, 0, 0); 
                 },
                 message: 'Start date cannot be in the past.',
             },

@@ -60,25 +60,25 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre('save', async function (next) {
-    // if the password is not modified, then move on to the next middleware
+   
     if (!this.isModified('password')) {
         next();
     }
-    // if the password is modified, then hash the password and move on to the next middleware
+   
     let salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
     next();
 });
 
 userSchema.methods.getJWTToken = function () {
-    // return a signed token with the user id and the secret key
+  
     return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_TIME,
     });
 };
 
 userSchema.methods.isValidatePassword = async function (enteredPassword) {
-    // compare the entered password with the password in the database
+   
     return await bcrypt.compare(enteredPassword, this.password);
 };
 
