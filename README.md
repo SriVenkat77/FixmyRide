@@ -1,61 +1,55 @@
-FixMyRide: Bike Service Web Application
+# FixMyRide: Bike Service Web Application
 
-Deployed Demo
-	• Frontend: https://fixmyridea.netlify.app
-	• Backend: https://fixmyride-dpfi.onrender.com
+## Deployed Demo
+- **Frontend**: [https://fixmyridea.netlify.app/](https://fixmyridea.netlify.app/)
+- **Backend**: [https://fixmyride-dpfi.onrender.com](https://fixmyride-dpfi.onrender.com)
 
-Introduction: 
-FixMyRide is a web application designed for bike servicing, catering to two roles: customers and service providers. Users can register, log in, and book bike services using Razorpay for secure payments. Service providers can post, edit, and delete services, as well as update the booking status in real-time.
-Tech Stack
-	• Frontend: React, Vite, TailwindCSS
-	• State Management: Zustand
-	• Lazy Loading: Implemented for better performance
-	• Backend: Node.js, Express.js, MongoDB
-	• Validation: Joi Schema for data validation
-	• Authentication: JWT-based authentication
-	• Real-Time Features: Sockets for live updates
-	• Notifications: Toast notifications for user interactions
-	• Payment Integration: Razorpay for secure transactions
-Detailed Feature Walkthrough
-1. User Authentication
-	• Description: Secure authentication for both customers and service providers.
-	• Implementation: 
-		○ JWT authentication for secure sessions.
-		○ Users can register and log in with email and password.
-		○ Service providers have a separate authentication mechanism.
-2. Customer Features
-	• Service Booking: Users can browse available bike services and make bookings.
-	• Payment Integration: Secure payment processing using Razorpay.
-	• Booking Management: Customers can view booking details and track status in real-time.
-3. Service Provider Features
-	• Service Management: Post, edit, and delete services.
-	• Booking Status Update: Real-time status updates for bookings.
-	• Customer Interaction: Manage customer bookings efficiently.
-4. Real-Time Updates
-	• Sockets Implementation: Live updates for booking status and service interactions.
-	• Toast Notifications: Instant feedback for actions performed on the platform.
-5. Dashboard Page
-	• Description: Displays a list of available bike services.
-	• Implementation: 
-		○ Fetches service data dynamically from the backend.
-		○ Responsive UI using TailwindCSS.
-Technical Details
-Tech Stack
-	• Frontend: React + Vite, styled with TailwindCSS.
-	• Backend: Node.js and Express for handling API requests.
-	• Database: MongoDB for storing user, service, and booking data.
-	• Authentication: JWT-based authentication.
-	• Validation: Joi Schema for data validation.
-	• Real-Time Features: Implemented using Socket.io.
-	• Notifications: Used Toast notifications for better user experience.
-	• Payment: Razorpay for secure transactions.
-Repository Structure
-	• Frontend: Contains React components for service display, authentication, and booking management.
-	• Backend: Contains Express routes, controllers for service providers, customers, and booking handling.
+## Introduction: High-Level Overview
+FixMyRide is a bike service web application that connects customers with service providers for seamless bike maintenance and repairs. The platform supports user authentication, service booking, real-time status updates, online payments via Razorpay, and automated booking confirmation emails using Nodemailer.
 
-Acknowledgments
-	• Razorpay for seamless payment integration.
-	• TailwindCSS for modern UI styling.
-	• MongoDB, Express, React, and Node.js for building a scalable platform.
-	• Socket.io for real-time interactions.
+## Tech Stack
+- **Frontend**: React, Vite, TailwindCSS
+- **State Management**: Zustand
+- **Backend**: Node.js, Express.js, MongoDB
+- **Validation**: Joi Schema
+- **Authentication**: JWT-based authentication
+- **Real-Time Updates**: Socket.io
+- **Notifications**: React Toast
+- **Payment Integration**: Razorpay
+- **Email Notifications**: Nodemailer
+
+## Detailed Feature Walkthrough
+
+### 1. User Authentication
+- **Description**: Secure authentication for both customers and service providers.
+- **Implementation**:
+  - JWT-based authentication for secure login and session management.
+  - Users and service providers register separately with role-based access.
+  - Secure password hashing and authentication.
+
+### 2. Customer Features
+- **Booking Services**: Customers can book bike services from available providers.
+- **Payment Integration**: Razorpay for secure payments.
+- **Real-Time Updates**: Live status updates on service progress.
+- **Email Notifications**: Customers receive booking confirmation emails via Nodemailer.
+
+### 3. Service Provider Features
+- **Post Services**: Providers can list their services with pricing and availability.
+- **Edit & Delete Services**: Modify service details as needed.
+- **Booking Management**: View and update booking statuses in real-time.
+
+## Technical Details
+### Repository Structure
+- **Frontend**: Contains React components, Zustand state management, and TailwindCSS styling.
+- **Backend**: Contains Express routes, controllers for authentication, service management, payments, and email notifications.
+
+
+## Acknowledgments
+- **Razorpay** for payment processing.
+- **TailwindCSS** for styling.
+- **MongoDB, Express, React, and Node.js** for building a robust platform.
+- **Socket.io** for real-time updates.
+- **Nodemailer** for automated booking confirmation emails.
+
+
 
