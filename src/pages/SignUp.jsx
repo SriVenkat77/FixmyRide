@@ -71,7 +71,7 @@ const SignUp = () => {
                             render={({ field }) => (
                                 <select {...field} className='w-full mt-1 p-2 border rounded-md focus:ring focus:ring-indigo-300'>
                                     <option value=''>Select a role</option>
-                                    <option value='owner'>Owner</option>
+                                    <option value='owner'>Partner</option>
                                     <option value='customer'>Customer</option>
                                 </select>
                             )}
